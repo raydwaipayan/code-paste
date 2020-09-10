@@ -12,7 +12,7 @@ router.get('/getExpiry', function(req, res) {
 })
 
 router.post('/create', async function(req, res) {
-  const { customKey, expiryIndex, code } = req.body
+  const { customKey, expiryIndex, code, lang } = req.body
 
   const url = process.env.BASE_URL + '/kgs/getKey?'
   const params = new URLSearchParams({ key: customKey })
@@ -26,6 +26,7 @@ router.post('/create', async function(req, res) {
       await Paste.create({
         code,
         key,
+        lang,
         deleteOnAccess: true
       })
     } else {
@@ -35,6 +36,7 @@ router.post('/create', async function(req, res) {
       await Paste.create({
         code,
         key,
+        lang,
         expires: moment(exptime, 'X').toISOString()
       })
       await agenda.schedule(expiryAgenda[expiryIndex], 'delete record', {
@@ -60,17 +62,17 @@ router.get('/pastes/:key', async function(req, res) {
   const paste = await Paste.findOne({ key }).cache({ key })
   res.json(paste)
 
-  try {
-    clearCache(key)
-    if (paste.deleteOnAccess) {
+  if (paste.deleteOnAccess) {
+    try {
+      clearCache(key)
       if (paste.accessed >= 1) {
         await Paste.findOneAndRemove({ key })
         return
       }
-    }
-    await Paste.findByIdAndUpdate(paste._id, {
-      accessed: paste.accessed + 1
-    })
-  } catch (error) {}
+      await Paste.findByIdAndUpdate(paste._id, {
+        accessed: paste.accessed + 1
+      })
+    } catch (error) {}
+  }
 })
 module.exports = router

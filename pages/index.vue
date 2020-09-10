@@ -11,6 +11,7 @@
               :show="dismissCountDown"
               variant="danger"
               dismissible
+              class="position-fixed fixed-top m-0 rounded-0"
               @dismissed="dismissCountDown = 0"
               @dismiss-count-down="countDownChanged"
             >
@@ -146,7 +147,7 @@ export default {
       code: '',
       pasteName: '',
       error: '',
-      dismissSecs: 10,
+      dismissSecs: 5,
       dismissCountDown: 0,
       selectedLang: 6,
       maxSize: 1024 * 1024,
@@ -176,15 +177,19 @@ export default {
         this.showAlert('Error!! Nothing to share!')
         return
       }
+
+      let resp
       try {
-        await this.$axios.$post('/api/create', {
+        resp = await this.$axios.$post('/api/create', {
           code: this.code,
-          pasteName: this.pasteName,
-          expiry: this.selectedExpiry
+          lang: this.languages[this.selectedLang],
+          customKey: this.pasteName,
+          expiryIndex: this.selectedExpiry
         })
       } catch (error) {
         this.showAlert('Something went wrong!! Try again later.')
       }
+      window.location = resp.url
     },
     handleLoad(el) {
       const file = el.target.files[0]
@@ -220,7 +225,6 @@ export default {
     showAlert(message) {
       this.error = message
       this.dismissCountDown = this.dismissSecs
-      this.scrollToTop()
     },
     scrollToTop() {
       window.scrollTo(0, 0)

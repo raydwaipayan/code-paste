@@ -23,6 +23,9 @@ module.exports = {
   /*
    ** Global CSS
    */
+  env: {
+    baseURL: process.env.BASE_URL || 'http://localhost:3000'
+  },
   css: [{ src: '~/assets/bootstrap.scss' }],
   /*
    ** Plugins to load before mounting the App
@@ -46,6 +49,7 @@ module.exports = {
     'bootstrap-vue/nuxt',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    'nuxt-clipboard2',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
     [

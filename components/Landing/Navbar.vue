@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar toggleable="sm" type="dark" variant="dark" class="px-sm-5">
-      <b-navbar-brand href="#">
+      <b-navbar-brand :href="getUrl()">
         <b-row class="brand">
           <b-col class="text-center">
             <fa :icon="['far', 'file-code']"></fa>
@@ -13,15 +13,12 @@
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item href="#">
-            Status
-          </b-nav-item>
-          <b-nav-item-dropdown text="More" right>
-            <b-dropdown-item href="#">
+          <b-nav-item-dropdown text="Details" right>
+            <b-dropdown-item href="https://github.com/raydwaipayan/code-paste">
               <fa :icon="['fab', 'github']"> </fa>
               Source
             </b-dropdown-item>
-            <b-dropdown-item href="#">
+            <b-dropdown-item href="https://github.com/raydwaipayan/code-paste">
               About
             </b-dropdown-item>
           </b-nav-item-dropdown>
@@ -31,6 +28,15 @@
   </div>
 </template>
 
+<script>
+export default {
+  methods: {
+    getUrl() {
+      return process.env.baseURL
+    }
+  }
+}
+</script>
 <style scoped>
 .brand {
   color: #db4ed0;
