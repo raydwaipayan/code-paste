@@ -8,17 +8,47 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
     ports:
-     - 27017:27017
+     - '27017:27017'
+    volumes:
+     - 'mongo_data:/data/db'
+    networks:
+     - app
+    
   redis:
-    image: 'docker.io/bitnami/redis:6.0-debian-10'
+    image: 'redis:alpine'
+    command: redis-server
     environment: 
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+      - REDIS_REPLICATION_MODE=master
     ports:
       - '6379:6379'
     volumes:
+      - './redis.conf:/usr/local/etc/redis/redis.conf'
       - 'redis_data:/bitnami/redis/data'
-
+    networks:
+      - app
+ 
+  code-paste:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    env_file: .env
+    depends_on:
+      - mongo
+      - redis
+    ports:
+      - '3000:3000'
+    links:
+      - mongo
+      - redis
+    networks:
+      - app
 volumes:
   redis_data:
     driver: local
+  mongo_data:
+    driver: local
+
+networks:
+  app:
+    driver: bridge     
