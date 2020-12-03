@@ -1,8 +1,11 @@
-# code-paste
+<div align="center">
+  <a>
+    <img src="https://socialify.git.ci/raydwaipayan/code-paste/image?description=1&font=Raleway&forks=1&issues=1&language=1&owner=1&pattern=Brick%20Wall&pulls=1&stargazers=1&theme=Light" />
+  </a>
+  <b>Code-Paste</b>
+</div>
 
-> Web app for pasting and sharing code snippets
-
-## Build Setup
+## Development Setup
 
 ```bash
 # install dependencies
@@ -15,8 +18,10 @@ $ npm run dev
 $ npm run build
 $ npm run start
 
-# generate static project
-$ npm run generate
 ```
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+## Docker Deployment
+
+```
+docker-compose up -d
+```
